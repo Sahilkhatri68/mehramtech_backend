@@ -10,6 +10,7 @@ const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
   "https://www.motilearn.site",
+  "https://mehramtech-adminpanel.vercel.app",
 ];
 app.use(
   cors({
