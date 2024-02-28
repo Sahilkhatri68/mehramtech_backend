@@ -19,9 +19,17 @@ const adminSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  phone_no: {
+    type: Number,
+    require: true,
+  },
   adminAddress: {
     type: String,
     require: true,
+  },
+  adminavailability: {
+    type: Boolean,
+    default: false,
   },
 });
 module.exports = mongoose.model("admindetail", adminSchema);

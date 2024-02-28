@@ -27,6 +27,9 @@ app.get("/", (req, res) => {
 // API TO ADD NEW PERSON
 app.use("/api/shopkeepers", require("./routes/shopkeepers_api"));
 app.use("/api/device", require("./routes/DeviceApi"));
+app.use("/api/adminsettings", require("./routes/adminsettings"));
+app.use("/api/shopkeeperlogin", require("./routes/shopkeeper_login"));
+app.use("/api/shopkeeperlogout", require("./routes/shopkeeper_logout"));
 
 app.listen(PORT, () => {
   console.log(`server is running http://localhost:${PORT}`);
