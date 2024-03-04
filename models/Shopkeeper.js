@@ -46,12 +46,12 @@ const shopkeeperSchema = {
     type: Date,
     default: Date.now,
   },
-  //   productsforservices: [
-  //     {
-  //       type: mongoose.Types.ObjectId,
-  //       ref: "products",
-  //     },
-  //   ],
+  productsforservices: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "device_request",
+    },
+  ],
 };
 
 module.exports = mongoose.model("shopkeeperSchema", shopkeeperSchema);
