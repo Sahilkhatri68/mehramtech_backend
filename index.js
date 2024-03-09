@@ -34,8 +34,9 @@ app.get("/", (req, res) => {
 });
 
 // API TO ADD NEW PERSON
-app.use("/api/shopkeepers", require("./routes/shopkeepers_api"));
 app.use("/api/adminsettings", require("./routes/adminsettings"));
+app.use("/api/adminAuthentication", require("./routes/adminAuth"));
+app.use("/api/shopkeepers", require("./routes/shopkeepers_api"));
 app.use("/api/shopkeeperlogin", require("./routes/shopkeeper_login"));
 app.use("/api/devicerequest", require("./routes/requestissueDevice"));
 
