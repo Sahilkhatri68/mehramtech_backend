@@ -19,7 +19,7 @@ app.use(
       "http://localhost:3001",
       "https://www.motilearn.site",
       "https://mehramtech-adminpanel.vercel.app", // link of adminpanel
-      "https://mehramtech-shopkeeperpanel.vercel.app/", // link of shopkeeperpanel
+      "https://mehramtech-shopkeeperpanel.vercel.app", // link of shopkeeperpanel
     ],
     credentials: true,
   })
