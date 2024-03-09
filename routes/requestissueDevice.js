@@ -45,9 +45,8 @@ router.get("/:id", async (req, res) => {
 // code to update issueresolveStatus of product by getting id
 router.put("/:id", async (req, res) => {
   const productId = req.params.id;
-  console.log(productId);
 
-  const { issueresolveStatus } = req.body;
+  const { issueresolveStatus } = req.body; //to get main value
 
   try {
     // Find the product by ID and update the issueresolveStatus
@@ -56,7 +55,6 @@ router.put("/:id", async (req, res) => {
       { $set: { issueresolveStatus } },
       { new: true } // Return the updated document
     );
-
     if (!updatedProduct) {
       return res.status(404).json({
         message: "Product not found",
@@ -140,5 +138,44 @@ router.post("/", async (req, res) => {
     res.status(500).json({ message: error.message, status: "error" });
   }
 });
+
+// code to get product by RequestGenerator in shopkeeper panel
+// code to get product by RequestGenerator in shopkeeper panel
+router.get("/shopkeeper-requested-alldevices/:id", async (req, res) => {
+  const shopkeeperIdToGetRequestedProducts = req.params.id;
+
+  try {
+    const requestedDevices = await devices_request_schema.find({
+      requestGenerator: shopkeeperIdToGetRequestedProducts,
+    });
+
+    if (requestedDevices.length > 0) {
+      res.json(requestedDevices);
+      console.log(requestedDevices);
+    } else {
+      res.status(404).json({ error: "Requested devices not found." });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message, status: "error" });
+  }
+});
+
+// router.get("/shopkeeper-requested-alldevices/:id", async (req, res) => {
+//   const shopkeeperIdToGetRequestedProducts = req.params.id;
+
+//   try {
+//     const requestedDevices = devices_request_schema.find((device) =>
+//       device.requestGenerator.includes(shopkeeperIdToGetRequestedProducts)
+//     );
+//     if (requestedDevices) {
+//       res.json(requestedDevices);
+//       console.log(requestedDevices);
+//     } else {
+//       res.status(404).json({ error: "Requested device not found." });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ message: error.message, status: "error" });
+//   }
+// });
 
 module.exports = router;

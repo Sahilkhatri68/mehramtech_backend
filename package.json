@@ -21,11 +21,14 @@
     "express": "^4.18.2",
     "fast-two-sms": "^3.0.0",
     "gsmarena-api": "^2.0.4",
+    "http": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.1.0",
     "mongoose": "^7.5.2",
     "nodemailer": "^6.9.9",
     "nodemon": "^3.0.1",
-    "unirest": "^0.6.0"
+    "socket.io": "^4.7.4",
+    "unirest": "^0.6.0",
+    "ws": "^8.16.0"
   }
 }

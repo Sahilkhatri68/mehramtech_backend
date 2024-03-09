@@ -1,23 +1,31 @@
 const express = require("express");
 const app = express();
-app.use(express.json());
-const PORT = 4000;
 const cors = require("cors");
 const connectDb = require("./config/dbconn");
+const http = require("http");
+const socketIO = require("socket.io");
+const server = http.createServer(app);
+const io = socketIO(server);
+
+const PORT = 4000;
+
 connectDb();
 
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://localhost:3001",
-  "https://www.motilearn.site",
-  "https://mehramtech-adminpanel.vercel.app",
-];
+// Add CORS middleware
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://www.motilearn.site",
+      "https://mehramtech-adminpanel.vercel.app",
+    ],
     credentials: true,
   })
 );
+
+app.use(express.json());
+
 app.get("/", (req, res) => {
   res.json({
     message: "Motilearn_Services server is running properly....",
@@ -26,12 +34,11 @@ app.get("/", (req, res) => {
 
 // API TO ADD NEW PERSON
 app.use("/api/shopkeepers", require("./routes/shopkeepers_api"));
-app.use("/api/device", require("./routes/DeviceApi"));
 app.use("/api/adminsettings", require("./routes/adminsettings"));
 app.use("/api/shopkeeperlogin", require("./routes/shopkeeper_login"));
 app.use("/api/shopkeeperlogout", require("./routes/shopkeeper_logout"));
 app.use("/api/devicerequest", require("./routes/requestissueDevice"));
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`server is running http://localhost:${PORT}`);
 });
