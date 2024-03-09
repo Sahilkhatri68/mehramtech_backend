@@ -81,4 +81,17 @@ router.get("/check_have_token", async (req, res) => {
   }
 });
 
+// shopkeeper LogOut Code
+
+router.post("/shopkeeperLogout", (req, res) => {
+  try {
+    // Clear the authentication token from cookies
+    res.clearCookie("auth_token");
+
+    res.status(200).json({ message: "Logout success", status: "success" });
+  } catch (error) {
+    res.status(500).json({ message: error.message, status: "error" });
+  }
+});
+
 module.exports = router;
