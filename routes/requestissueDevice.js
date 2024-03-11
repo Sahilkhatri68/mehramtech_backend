@@ -80,14 +80,21 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const getproductbyid = await devices_request_schema.deleteOne({
-      id: req.params._id,
+      _id: req.params.id,
     });
-    res.json({
-      message: "Product deleted",
-    });
+
+    if (getproductbyid.deletedCount === 1) {
+      res.json({
+        message: "Product deleted",
+      });
+    } else {
+      res.status(404).json({
+        message: "Product not found",
+      });
+    }
   } catch (error) {
     console.log("Error in deleting product by Id", error);
-    res.status(400).json({
+    res.status(500).json({
       message: "Error",
       status: "Error",
     });
