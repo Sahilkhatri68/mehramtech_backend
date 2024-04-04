@@ -47,6 +47,7 @@ router.post("/", async (req, res) => {
       message: "login success",
       status: "success",
       token: token,
+      details_shopkeeper: fetched_shopkeeper,
       fetched_shopkeeper: res.locals.fetched_shopkeeper,
     });
   } catch (error) {
@@ -73,7 +74,7 @@ router.get("/check_have_token", async (req, res) => {
       res.status(200).json({
         token: true,
         shopkeeperid: id_from_token,
-        shopkeeper: shopkeeper, // Return complete information of the shopkeeper
+        shopkeeper_details: shopkeeper, // Return complete information of the shopkeeper
       });
     }
   } catch (error) {
