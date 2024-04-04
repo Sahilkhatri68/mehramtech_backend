@@ -41,7 +41,7 @@ router.post("/", async (req, res) => {
       secure: true,
     });
 
-    res.setHeader("x-auth-token", token);
+    res.setHeader("X-Auth-Token", token);
 
     res.status(200).json({
       message: "login success",
@@ -57,7 +57,7 @@ router.post("/", async (req, res) => {
 // code to check shopkeeper is logged in or not
 router.get("/check_have_token", async (req, res) => {
   try {
-    let token = req.cookies["auth_token"] || req.headers["x-auth-token"];
+    let token = req.cookies["auth_token"] || req.headers["X-Auth-Token"];
 
     const have_valid_token = jwt.verify(token, process.env.JWT_SECRET);
 

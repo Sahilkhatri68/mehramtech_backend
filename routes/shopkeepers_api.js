@@ -21,7 +21,6 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const shopkeeper = await shopkeeperSchema.findById(req.params.id);
-    console.log(shopkeeper);
     if (!shopkeeper) {
       return res.status(404).json({
         message: "Shopkeeper not found",

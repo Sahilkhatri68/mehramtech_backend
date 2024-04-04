@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const shopkeeperSchema = require("../models/Shopkeeper");
 const devices_request_schema = require("../models/devices_request");
+const authenticateToken = require("../middleware/CheckToken");
 // code to get all request
 router.get("/", async (req, res) => {
   try {
@@ -21,6 +22,7 @@ router.get("/", async (req, res) => {
     });
   }
 });
+
 // code to get by id
 router.get("/:id", async (req, res) => {
   try {
@@ -39,6 +41,62 @@ router.get("/:id", async (req, res) => {
       message: "Error",
       status: "Error",
     });
+  }
+});
+
+// code to get request by notification status
+router.get("/notification/:status", async (req, res) => {
+  try {
+    const { status } = req.params;
+
+    // Check if status is not "true" or "false" as strings
+    if (status !== "true" && status !== "false") {
+      return res.status(400).json({ message: "Invalid Status Provided" });
+    }
+
+    const requestedNotificationType = await devices_request_schema
+      .find({
+        notification: status === "true", // Convert string to boolean
+      })
+      .sort({ createdAt: -1 });
+
+    res.json({
+      requestedNotificationType,
+      total: requestedNotificationType.length,
+    });
+  } catch (error) {
+    console.log("Error in getting All request ", error);
+    res.status(400).json({
+      message: "Error",
+      status: "Error",
+    });
+  }
+});
+
+// code to get device by issueResolveStatus which is pending
+router.get("/issueresolvestatus/:status", async (req, res) => {
+  try {
+    const { status } = req.params;
+
+    if (
+      status !== "pending" &&
+      status !== "completed" &&
+      status !== "not-completed"
+    ) {
+      return res.status(400).json({ message: "Invalid status provided" });
+    }
+
+    const requestedDevices = await devices_request_schema
+      .find({ issueresolveStatus: status })
+      .sort({ createdAt: -1 });
+
+    res.json({
+      requestedDevices,
+      totalDevices: requestedDevices.length,
+    });
+  } catch (error) {
+    console.log("Error in getting devices by issueresolveStatus: ", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
@@ -101,28 +159,8 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// code to get productforservices by shopkeeper
-// router.get("/productforservicesbyshopkeeper", async (req, res) => {
-//   try {
-//     const productByShopkeeper = await devices_request_schema.find().populate([
-//       {
-//         path: "productsforservices",
-//       },
-//     ]);
-//     res.json(productByShopkeeper);
-//   } catch (error) {
-//     console.log("Error in getting Product by Shopkeeper", error);
-//     res.status(400).json({
-//       message: "Error",
-//       status: "Error",
-//     });
-//   }
-// });
-
 // code to post request
 router.post("/", async (req, res) => {
-  //   console.log(req.body);
-
   const ProductForService = new devices_request_schema({
     brand: req.body.brand,
     model: req.body.model,
@@ -130,6 +168,7 @@ router.post("/", async (req, res) => {
     imei: req.body.imei,
     productdeliveryStatus: req.body.productdeliveryStatus,
     requestGenerator: req.body.requestGenerator,
+    notification: false,
   });
 
   try {
@@ -140,13 +179,11 @@ router.post("/", async (req, res) => {
       data: NewProductForService,
     });
     // code to get shopkeeper_id
-    // const
   } catch (error) {
     res.status(500).json({ message: error.message, status: "error" });
   }
 });
 
-// code to get product by RequestGenerator in shopkeeper panel
 // code to get product by RequestGenerator in shopkeeper panel
 router.get("/shopkeeper-requested-alldevices/:id", async (req, res) => {
   const shopkeeperIdToGetRequestedProducts = req.params.id;
@@ -158,7 +195,7 @@ router.get("/shopkeeper-requested-alldevices/:id", async (req, res) => {
 
     if (requestedDevices.length > 0) {
       res.json(requestedDevices);
-      console.log(requestedDevices);
+      // console.log(requestedDevices);
     } else {
       res.status(404).json({ error: "Requested devices not found." });
     }
@@ -166,23 +203,5 @@ router.get("/shopkeeper-requested-alldevices/:id", async (req, res) => {
     res.status(500).json({ message: error.message, status: "error" });
   }
 });
-
-// router.get("/shopkeeper-requested-alldevices/:id", async (req, res) => {
-//   const shopkeeperIdToGetRequestedProducts = req.params.id;
-
-//   try {
-//     const requestedDevices = devices_request_schema.find((device) =>
-//       device.requestGenerator.includes(shopkeeperIdToGetRequestedProducts)
-//     );
-//     if (requestedDevices) {
-//       res.json(requestedDevices);
-//       console.log(requestedDevices);
-//     } else {
-//       res.status(404).json({ error: "Requested device not found." });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ message: error.message, status: "error" });
-//   }
-// });
 
 module.exports = router;

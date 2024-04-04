@@ -35,6 +35,10 @@ const devices_request = new mongoose.Schema(
         ref: "shopkeeperSchema",
       },
     ],
+    notification: {
+      type: Boolean,
+      default: false,
+    },
     date: {
       type: Date,
       default: Date.now,

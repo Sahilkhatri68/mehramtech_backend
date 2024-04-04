@@ -46,7 +46,7 @@ router.post("/adminLogin", async (req, res) => {
       message: "login success",
       status: "success",
       token: token,
-      fetchedAdmin: res.locals.fetchedAdmin,
+      Admin_details: fetchedAdmin,
     });
   } catch (error) {
     res.status(500).json({ message: error.message, status: "error" });

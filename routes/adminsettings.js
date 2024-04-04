@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const adminSchema = require("../models/Admin");
 const bcryptjs = require("bcryptjs");
-
+const authenticateToken = require("../middleware/CheckToken");
 // code to get admin
-router.get("/", async (req, res) => {
+router.get("/", authenticateToken, async (req, res) => {
   try {
     const admin = await adminSchema.find();
     res.json({
