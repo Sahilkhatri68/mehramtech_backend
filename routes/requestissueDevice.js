@@ -100,6 +100,44 @@ router.get("/issueresolvestatus/:status", async (req, res) => {
   }
 });
 
+// code to get device by issueResolveStatus with status as well as requestgenerator
+router.get(
+  "/issueresolvestatus/:status/:requestGeneratorId",
+  async (req, res) => {
+    try {
+      const { status, requestGeneratorId } = req.params;
+
+      if (
+        status !== "pending" &&
+        status !== "completed" &&
+        status !== "not-completed"
+      ) {
+        return res.status(400).json({ message: "Invalid status provided" });
+      }
+
+      const query = {
+        issueresolveStatus: status,
+        requestGenerator: { $in: [requestGeneratorId] },
+      };
+
+      const requestedDevices = await devices_request_schema
+        .find(query)
+        .sort({ createdAt: -1 });
+
+      res.json({
+        requestedDevices,
+        totalDevices: requestedDevices.length,
+      });
+    } catch (error) {
+      console.log(
+        "Error in getting devices by status and requestGeneratorId: ",
+        error
+      );
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+);
+
 // code to update issueresolveStatus of product by getting id
 router.put("/:id", async (req, res) => {
   const productId = req.params.id;
